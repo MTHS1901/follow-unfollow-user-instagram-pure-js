@@ -4,7 +4,7 @@ You can follow or unfollow user with js only, this code has a function to get th
 remember the code needs to be injected into the instagram.com domain, it is not possible to inject the code into third-party sites because Instagram CORS will not receive the request.
 
 ```
-sername = prompt("follow username:"); // username to follow
+username = prompt("follow username:"); // username to follow
 
 // get the account id by username
 fetch("https://www.instagram.com/" + username + "/?__a=1&__d=dis").then(e => e.json()).then(e => {
