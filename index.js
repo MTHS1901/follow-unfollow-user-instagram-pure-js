@@ -1,3 +1,5 @@
+// Dev - github.com/mths1901
+
 username = prompt("follow username:"); // username to follow
 
 // get the account id by username
