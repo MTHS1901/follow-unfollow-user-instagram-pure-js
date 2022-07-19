@@ -4,11 +4,14 @@ You can follow or unfollow user with js only, this code has a function to get th
 remember the code needs to be injected into the instagram.com domain, it is not possible to inject the code into third-party sites because Instagram CORS will not receive the request.
 
 ```
+// Dev - github.com/mths1901
+
 username = prompt("follow username:"); // username to follow
 
 // get the account id by username
 fetch("https://www.instagram.com/" + username + "/?__a=1&__d=dis").then(e => e.json()).then(e => {
      user_id = e.graphql.user.id;
+     console.log("%cUSERNAME: " + username, "color: green"), console.log("%cID:" + user_id, "color: green");
      sessionFetch(user_id);
  })
 
@@ -17,12 +20,15 @@ function sessionFetch(userId) {
     fetch("https://www.instagram.com").then(e => e.text()).then(e => {
         var ajaxRequestCode = e.match(/(?<="rollout_hash":")\w+/i)[0];
         var sessionToken = e.match(/(?<="csrf_token":")\w+/i)[0];
-        follow(sessionToken, ajaxRequestCode, userId)
+        console.log("%crollout_hash: " + ajaxRequestCode, 'color: orange')
+        console.log("%ccsrf_token: " + sessionToken, 'color: orange')
+        follow(sessionToken, ajaxRequestCode, userId);
     })
    }
 
 // follow user
  function follow(sessionToken, ajaxRequestCode, userId){
+ console.log("following id " + userId + "...")
  fetch("https://www.instagram.com/web/friendships/" + userId + "/follow/", {
      method: "POST",
      headers: {
@@ -31,10 +37,8 @@ function sessionFetch(userId) {
      "x-instagram-ajax": ajaxRequestCode,
      "x-requested-with": "XMLHttpRequest"
     }
- }).then(e => 200 != e.status ? console.log("Falha na operação") : e.json()).then(e => {
-     "ok" == e.status && console.log("Sucesso")
- }).catch(e => {
-     console.log(e)
+ }).then(e => 200 != e.status ? console.log("%cFail!", "color: red") : e.json()).then(e => {
+     "ok" == e.status && console.log("%cSucess!", "color: green")
  })
 }
 ```
