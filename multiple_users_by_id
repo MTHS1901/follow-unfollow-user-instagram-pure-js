@@ -1,0 +1,34 @@
+// Dev - github.com/mths1901
+
+users = ['0000000000', '000000000', '000000000']; // add users id here
+
+sessionFetch(users);
+
+// get instagram session token
+function sessionFetch() {
+    fetch("https://www.instagram.com").then(e => e.text()).then(e => {
+        var ajaxRequestCode = e.match(/(?<="rollout_hash":")\w+/i)[0];
+        var sessionToken = e.match(/(?<="csrf_token":")\w+/i)[0];
+        console.log("%crollout_hash: " + ajaxRequestCode, 'color: orange')
+        console.log("%ccsrf_token: " + sessionToken, 'color: orange')
+        follow(sessionToken, ajaxRequestCode, users);
+    })
+}
+
+// follow user
+function follow(sessionToken, ajaxRequestCode, users) {
+    var uID = users;
+    for (i = 0; i < uID.length; i++) {
+        fetch("https://www.instagram.com/web/friendships/" + uID[i] + "/follow/", {
+            method: "POST",
+            headers: {
+                "content-type": "application/x-www-form-urlencoded",
+                "x-csrftoken": sessionToken,
+                "x-instagram-ajax": ajaxRequestCode,
+                "x-requested-with": "XMLHttpRequest"
+            }
+        }).then(e => 200 != e.status ? console.log("%cFollow Fail!", "color: red") : e.json()).then(e => {
+            "ok" == e.status && console.log("%cFollow Sucess!", "color: green")
+        })
+    }
+}
